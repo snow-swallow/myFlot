@@ -1,0 +1,58 @@
+<html>
+ <head>
+  <script type="text/javascript">
+   var xhr;
+   function getXHR(){
+    var req;
+    if(window.XMLHttpRequest){
+     req=new XMLHttpRequest();
+     
+    }else if(window.ActiveXObject){
+     req=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return req;
+   }
+   
+   function suggest(){
+    if(xhr && xhr.readyState!=0){
+    	xhr.abort();
+    }
+    xhr=getXHR();
+    
+    url="../php/json.php";
+    xhr.open("POST",url,true);
+    
+    searchValue=document.getElementById("search").value;
+    //alert(searchValue);
+    data="search="+encodeURIComponent(searchValue);
+    xhr.onreadystatechange=readyStateChange;
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.send(data);
+   }
+   function readyStateChange(){
+    if(xhr.readyState==4){
+     if(xhr.responseText && xhr.status==200){
+      	json=xhr.responseText;
+     	alert('-----'+json);
+      
+      	try{
+       		suggestionArr=json.parseJSON();
+      	}catch(e){
+      	}
+	    alert(suggestionArr);
+	    tmpHtml="";
+      	for(i=0,len=suggestionArr.length;i<len;i++){
+      		tmpHtml+=suggestionArr[i]+"<br />";
+      	}
+      	div=document.getElementById("suggestions");
+      	div.innerHTML=tmpHtml;
+     }
+    }
+   }
+  </script>
+ </head>
+ <body>
+  <input id="search" type="text" onKeyUp="suggest()"/>
+  <div id="suggestions"></div>
+ </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>HTML5</title>
+	</head>
+	<body>
+		<header>headerrrrr</header>
+		<section>
+			<form enctype="multipart/form-data">
+				<input name="file" type="file" />
+				<input type="button" value="Upload" />
+			</form>
+			<progress></progress>
+		</section>
+		<script type="text/javascript">
+		
+			$(':button').click(function(){
+			    var formData = new FormData($('form')[0]);
+			    $.ajax({
+			        url: '../php/html5Upload.php',  //server script to process data
+			        type: 'POST',
+			        xhr: function() {  // custom xhr
+			            myXhr = $.ajaxSettings.xhr();
+			            if(myXhr.upload){ // check if upload property exists
+			                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+			            }
+			            return myXhr;
+			        },
+			        //Ajax事件
+			        beforeSend: beforeSendHandler,
+			        success: completeHandler,
+			        error: errorHandler,
+			        // Form数据
+			        data: formData,
+			        //Options to tell JQuery not to process data or worry about content-type
+			        cache: false,
+			        contentType: false,
+			        processData: false
+			    });
+			});
+			
+			function progressHandlingFunction(e){
+			    if(e.lengthComputable){
+			        $('progress').attr({value:e.loaded,max:e.total});
+			    }
+			}
+		
+		</script>
+	</body>
+</html>
