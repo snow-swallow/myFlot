@@ -390,7 +390,7 @@ sorttable = {
 	tmp = [];
 	for(var i = 0; i < headrow.length; i ++){
 		if(headrow[i].className.match(/\bsorthead_([0-9]+)\b/)){
-			tmp[i] = [parseFloat(headrow[i].className.replace('sorthead_', '')), i]; // store format as [sort order, column index]
+			tmp.push([parseFloat(headrow[i].className.replace('sorthead_', '')), i]); // store format as [sort order, column index]
 		}
 	}
 	tmp.sort(); // sort the muli-sort head in ASC order
@@ -406,6 +406,14 @@ sorttable = {
 		row_array[row_array.length] = rows[i];
 	}
 	row_array.sort(sorttable.multi_comparator);
+	console.log(row_array);
+	
+	tb = table.tBodies[0];
+    for (var j=0; j<row_array.length; j++) {
+      tb.appendChild(row_array[j]);
+    }
+
+    delete row_array;
   }
 }
 
