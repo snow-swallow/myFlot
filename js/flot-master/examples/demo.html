@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>demo</title>
 		<style type="text/css">
-		.xAxis  .flot-tick-label{
+		.xAxis .flot-tick-label{
 			-moz-transform: rotate(5deg);-webkit-transform: rotate(-35deg);
 		}
 		</style>
@@ -16,44 +16,9 @@
 		<script type="text/javascript">
 		$(function() {
 			
-			
-			//$.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
-			$.plot($('#placeholder'),
-				[ { 
-						label: "Foo", 
-						data: [ [10, 1], [17, -14], [30, 5] ], 
-						color: "rgb(255, 100, 123)", 
-						//xaxis: 1,
-						yaxis:2, 
-						clickable: true 
-					}, { 
-						label: "Bar", 
-						data: [ [11, 13], [19, 11], [30, -7] ] 
-					} 
-				], {
-					xaxes: [{position: 'top'}],
-					yaxes: [{position: 'left'}, {position:'right'}],
-					/*xaxis: {
-						transform: function (v) { return -v; },
-					    inverseTransform: function (v) { return -v; },
-					    //ticks: [0,12,16, 22.4]
-					    font: {
-					        size: 11,
-					        lineHeight: 13,
-					        style: "italic",
-					        weight: "bold",
-					        family: "sans-serif",
-					        variant: "small-caps",
-					        color: "#545454"
-					    },
-					    ticks: [[0, "zero"], [12, "one mark"], [16, "two marks"]]
-					}	*/
-				});
-			
-			
-			
 			var d = [[915145200000, 167.94], [917823600000, 128.82], [920242800000, 139.46], [922917600000, 200.77], [925509600000, 270.66], [928188000000, 370.10], [930780000000, 359.08], [933458400000, 166.66], [936136800000, 184.60], [937136800000, 204.60], [938728800000, 365.17], [941410800000, 166.51], [944002800000, 297.89], [946681200000, 369.04], [949359600000, 369.35], [951865200000, 270.38], [954540000000, 271.63], [957132000000, 371.32]];
 			var xMin = 915045200000, xMax = 957132000000, yMin = 128.82, yMax = 381.32;
+			var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
 			
 			var placeholder = $("#placeholder1");
 			var plot = $.plot(placeholder, [{
@@ -62,7 +27,7 @@
 					yaxis: 2
 				},{
 					color: 'rgb(30, 180, 20)',
-					data: [[xMin, 250], [xMax, 250]], 
+					data: [[xMin, 350], [xMax, 250]], 
 					yaxis: 2
 				},{
 					color: "red",
@@ -80,7 +45,11 @@
 						below: 180,
 						color: "yellow"
 					}], */
-					points: { symbol: "circle" }
+					steps: true
+				},{
+					data: d2,
+					color: "yellow",
+					bars: { show: true }
 				}], {
 					xaxis: {
 						mode: 'time',
@@ -112,11 +81,11 @@
 		</script>
 	</head>      
 	<body>
-		<div id="placeholder" style="width:600px;height:300px"></div>
+		<!-- <div id="placeholder" style="width:600px;height:300px"></div>
 		<div class='flot-x-axis flot-x1-axis'>
 		    <div class='flot-tick-label'>January 2013</div>
 		</div>
-		<br/>
+		<br/> -->
 		<div id="placeholder1" style="width:750px;height:450px"></div>
 	</body>
 </html>
