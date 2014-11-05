@@ -33,6 +33,7 @@ sorttable = {
 
     forEach(document.getElementsByTagName('table'), function(table) {
       if (table.className.search(/\bsortable\b/) != -1) {
+    	sorttable.doMultiSort(table);
         sorttable.makeSortable(table);
       }
     });
@@ -330,6 +331,81 @@ sorttable = {
         b++;
 
     } // while(swap)
+  },
+  
+  multi_comparator: function(r1, r2){
+	  var columns = sorttable.head_todosort, table = columns[0], result;
+	  for(var i = 1; i < columns.length; i ++){
+		  result = sorttable.sortby_row(table, r1, r2, columns[i]);
+		  if(result === 0){
+			  continue;
+		  } else {
+			  return result;
+		  }
+	  }
+  },
+  sortby_row: function(table, r1, r2, c){
+	  var cell_comparator = sorttable.guessType(table, c);
+	  return cell_comparator(
+			  [sorttable.getInnerText(r1.cells[c]), r1], 
+			  [sorttable.getInnerText(r2.cells[c]), r2]
+			 );
+  },
+  doMultiSort: function(table){
+	if (table.getElementsByTagName('thead').length == 0) {
+	      // table doesn't have a tHead. Since it should have, create one and
+	      // put the first table row in it.
+		the = document.createElement('thead');
+		the.appendChild(table.rows[0]);
+		table.insertBefore(the,table.firstChild);
+	}
+	// Safari doesn't support table.tHead, sigh
+	if (table.tHead == null) table.tHead = table.getElementsByTagName('thead')[0];
+	
+	if (table.tHead.rows.length != 1) return; // can't cope with two header rows
+
+    // Sorttable v1 put rows with a class of "sortbottom" at the bottom (as
+    // "total" rows, for example). This is B&R, since what you're supposed
+    // to do is put them in a tfoot. So, if there are sortbottom rows,
+    // for backwards compatibility, move them to tfoot (creating it if needed).
+    sortbottomrows = [];
+    for (var i=0; i<table.rows.length; i++) {
+      if (table.rows[i].className.search(/\bsortbottom\b/) != -1) {
+        sortbottomrows[sortbottomrows.length] = table.rows[i];
+      }
+    }
+    if (sortbottomrows) {
+      if (table.tFoot == null) {
+        // table doesn't have a tfoot. Create one.
+        tfo = document.createElement('tfoot');
+        table.appendChild(tfo);
+      }
+      for (var i=0; i<sortbottomrows.length; i++) {
+        tfo.appendChild(sortbottomrows[i]);
+      }
+      delete sortbottomrows;
+    }
+	
+	headrow = table.tHead.rows[0].cells;
+	tmp = [];
+	for(var i = 0; i < headrow.length; i ++){
+		if(headrow[i].className.match(/\bsorthead_([0-9]+)\b/)){
+			tmp[i] = [parseFloat(headrow[i].className.replace('sorthead_', '')), i]; // store format as [sort order, column index]
+		}
+	}
+	tmp.sort(); // sort the muli-sort head in ASC order
+	
+	sorttable.head_todosort = [table];
+	for(var i = 0; i < tmp.length; i ++){
+		sorttable.head_todosort.push(tmp[i][1]);
+	}
+	
+	rows = table.tBodies[0].rows;
+	row_array = [];
+	for (var i = 0; i < rows.length; i ++) {
+		row_array[row_array.length] = rows[i];
+	}
+	row_array.sort(sorttable.multi_comparator);
   }
 }
 
