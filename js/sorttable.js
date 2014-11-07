@@ -33,8 +33,8 @@ sorttable = {
 
     forEach(document.getElementsByTagName('table'), function(table) {
       if (table.className.search(/\bsortable\b/) != -1) {
-    	sorttable.doMultiSort(table);
         sorttable.makeSortable(table);
+        sorttable.doMultiSort(table);
       }
     });
 
@@ -393,27 +393,28 @@ sorttable = {
 			tmp.push([parseFloat(headrow[i].className.replace('sorthead_', '')), i]); // store format as [sort order, column index]
 		}
 	}
-	tmp.sort(); // sort the muli-sort head in ASC order
-	
-	sorttable.head_todosort = [table];
-	for(var i = 0; i < tmp.length; i ++){
-		sorttable.head_todosort.push(tmp[i][1]);
+	if(tmp.length > 0){
+		tmp.sort(); // sort the muli-sort head in ASC order
+		
+		sorttable.head_todosort = [table];
+		for(var i = 0; i < tmp.length; i ++){
+			sorttable.head_todosort.push(tmp[i][1]);
+		}
+		
+		rows = table.tBodies[0].rows;
+		row_array = [];
+		for (var i = 0; i < rows.length; i ++) {
+			row_array[row_array.length] = rows[i];
+		}
+		row_array.sort(sorttable.multi_comparator);
+		
+		tb = table.tBodies[0];
+		for (var j=0; j<row_array.length; j++) {
+			tb.appendChild(row_array[j]);
+		}
+		
+		delete row_array;
 	}
-	
-	rows = table.tBodies[0].rows;
-	row_array = [];
-	for (var i = 0; i < rows.length; i ++) {
-		row_array[row_array.length] = rows[i];
-	}
-	row_array.sort(sorttable.multi_comparator);
-	console.log(row_array);
-	
-	tb = table.tBodies[0];
-    for (var j=0; j<row_array.length; j++) {
-      tb.appendChild(row_array[j]);
-    }
-
-    delete row_array;
   }
 }
 
