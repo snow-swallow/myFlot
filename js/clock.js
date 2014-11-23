@@ -19,9 +19,14 @@ function draw(h, m, s) {
 		ctx.save();
 		
 		// outline circle
+		ctx.save();
 		ctx.beginPath();
+		ctx.fillStyle = '#fff';
+		ctx.strokeStyle = '#fff';
 		ctx.arc(ox, oy, r, 0, Math.PI*2, false);
+		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
 		
 		// circle center
 		ctx.beginPath();
@@ -78,6 +83,7 @@ function draw(h, m, s) {
 		ctx.fill();
 		
 		ctx.restore();
+		
 	}
 }
 
@@ -91,4 +97,5 @@ $(function(){
 		h = d.getHours() + milliseconds/1000/3600;
 		draw(h, m, s);
 	}, 50);
+	
 })

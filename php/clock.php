@@ -7,8 +7,8 @@
 		<title>clock</title>
 		<script src="../js/flot-master/jquery.js"></script>
 	</head>
-	<body>
-		<canvas id="clock_canvas" width="400" height="400" style="border:1px solid #ccc;"></canvas>
+	<body onload=''>
+		<canvas id="clock_canvas" width="380" height="380" style="padding:10px; background-color: #000"></canvas>
 		<script src="../js/clock.js"></script>
 	</body>
 </html>
